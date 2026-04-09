@@ -3,7 +3,9 @@ let name = capitalizeName(prompt("What is your name?"));
 let answer = 0;
 let guessCount = 0;
 let currentRange = 0;
+let startTime = 0;
 const scores = [];
+const times = [];
 
 function capitalizeName(value) {
     if (!value) {
@@ -33,6 +35,7 @@ function play(){
     answer = Math.floor(Math.random()*range) +1;
     currentRange = range;
     guessCount = 0;
+    startTime = new Date().getTime();
 
     guessBtn.disabled = false;
     giveUpBtn.disabled = false;
@@ -47,7 +50,9 @@ function makeGuess(){
     }
     guessCount++;
     if(guess == answer){
+        const elapsed = (new Date().getTime() - startTime) / 1000;
         msg.textContent = "Correct, " + name + "! It took " + guessCount + " tries.";
+        updateTime(elapsed);
         updateScore(guessCount);
         resetGame();
     }
@@ -88,6 +93,19 @@ function updateScore(score){
     }
 }
 
+function updateTime(elapsed){
+    times.push(elapsed);
+    const fastest = Math.min.apply(null, times);
+    let sum = 0;
+    for(let i = 0; i < times.length; i++){
+        sum += times[i];
+    }
+    const average = sum / times.length;
+
+    document.getElementById("fastest").textContent = "Fastest Game: " + fastest.toFixed(3) + " seconds";
+    document.getElementById("avgTime").textContent = "Average Time: " + average.toFixed(3) + " seconds";
+}
+
 function resetGame(){
     guess.value = "";
     guessBtn.disabled = true;
@@ -104,14 +122,18 @@ function giveUp(){
         return;
     }
 
+    const elapsed = (new Date().getTime() - startTime) / 1000;
     msg.textContent = "You gave up! Score set to " + currentRange;
+    updateTime(elapsed);
     updateScore(currentRange);
     resetGame();
     currentRange = 0;
 }
 
-displayDate();
-function displayDate(){
+updateDate();
+setInterval(updateDate, 1000);
+
+function updateDate(){
     const now = new Date();
     const monthNames = [
         "January", "February", "March", "April", "May", "June",
@@ -120,8 +142,13 @@ function displayDate(){
     const day = now.getDate();
     const suffix = getDateSuffix(day);
     const year = now.getFullYear();
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const seconds = String(now.getSeconds()).padStart(2, "0");
 
-    document.getElementById("date").textContent = monthNames[now.getMonth()] + " " + day + suffix + ", " + year;
+    document.getElementById("date").textContent =
+        monthNames[now.getMonth()] + " " + day + suffix + ", " + year + " " +
+        hours + ":" + minutes + ":" + seconds;
 }
 
 function getDateSuffix(day){
