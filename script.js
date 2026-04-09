@@ -1,8 +1,20 @@
 // add javascript here
+let name = capitalizeName(prompt("What is your name?"));
 let answer = 0;
 let guessCount = 0;
 let currentRange = 0;
 const scores = [];
+
+function capitalizeName(value) {
+    if (!value) {
+        return "";
+    }
+    const trimmed = value.trim().toLowerCase();
+    if (trimmed.length === 0) {
+        return "";
+    }
+    return trimmed[0].toUpperCase() + trimmed.slice(1);
+}
 
 document.getElementById("playBtn").addEventListener("click", play);
 document.getElementById("guessBtn").addEventListener("click", makeGuess);
@@ -17,7 +29,7 @@ function play(){
         }
         levels[i].disabled = true;
     }
-    document.getElementById("msg").textContent = "Guess a number 1-" +range;
+    document.getElementById("msg").textContent = "Guess a number 1-" + range + " " + name;
     answer = Math.floor(Math.random()*range) +1;
     currentRange = range;
     guessCount = 0;
@@ -30,12 +42,12 @@ function play(){
 function makeGuess(){
     let guess = parseInt(document.getElementById("guess").value);
     if(isNaN(guess)){
-        msg.textContent = "Please enter a valid number"; 
+        msg.textContent = "Please enter a valid number " + name; 
         return;
     }
     guessCount++;
     if(guess == answer){
-        msg.textContent = "Correct! It took " + guessCount + " tries.";
+        msg.textContent = "Correct, " + name + "! It took " + guessCount + " tries.";
         updateScore(guessCount);
         resetGame();
     }
