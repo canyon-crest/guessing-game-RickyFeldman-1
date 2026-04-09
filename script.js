@@ -89,3 +89,34 @@ function giveUp(){
     currentRange = 0;
 }
 
+displayDate();
+
+function displayDate(){
+    const now = new Date();
+    const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    const day = now.getDate();
+    const suffix = getDateSuffix(day);
+    const year = now.getFullYear();
+
+    document.getElementById("date").textContent = monthNames[now.getMonth()] + " " + day + suffix + ", " + year;
+}
+
+function getDateSuffix(day){
+    if(day % 100 >= 11 && day % 100 <= 13){
+        return "th";
+    }
+
+    const lastDigit = day % 10;
+    if(lastDigit === 1){
+        return "st";
+    } else if(lastDigit === 2){
+        return "nd";
+    } else if(lastDigit === 3){
+        return "rd";
+    } else {
+        return "th";
+    }
+}
