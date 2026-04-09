@@ -1,10 +1,12 @@
 // add javascript here
 let answer = 0;
 let guessCount = 0;
+let currentRange = 0;
 const scores = [];
 
 document.getElementById("playBtn").addEventListener("click", play);
 document.getElementById("guessBtn").addEventListener("click", makeGuess);
+document.getElementById("giveUpBtn").addEventListener("click", giveUp);
 
 function play(){
     let range = 0;
@@ -17,6 +19,7 @@ function play(){
     }
     document.getElementById("msg").textContent = "Guess a number 1-" +range;
     answer = Math.floor(Math.random()*range) +1;
+    currentRange = range;
     guessCount = 0;
 
     guessBtn.disabled = false;
@@ -63,6 +66,7 @@ function updateScore(score){
         }
     }
 }
+
 function resetGame(){
     guess.value = "";
     guessBtn.disabled = true;
@@ -73,3 +77,15 @@ function resetGame(){
     h.disabled = false;
     
 }
+
+function giveUp(){
+    if(currentRange <= 0){
+        return;
+    }
+
+    msg.textContent = "You gave up! Score set to " + currentRange;
+    updateScore(currentRange);
+    resetGame();
+    currentRange = 0;
+}
+
