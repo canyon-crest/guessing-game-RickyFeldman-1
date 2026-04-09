@@ -36,6 +36,7 @@ function play(){
     currentRange = range;
     guessCount = 0;
     startTime = new Date().getTime();
+    setTint("normal");
 
     guessBtn.disabled = false;
     giveUpBtn.disabled = false;
@@ -52,17 +53,25 @@ function makeGuess(){
     if(guess == answer){
         const elapsed = (new Date().getTime() - startTime) / 1000;
         msg.textContent = "Correct, " + name + "! It took " + guessCount + " tries.";
+        setTint("correct");
         updateTime(elapsed);
         updateScore(guessCount);
         resetGame();
     }
     else {
         const diff = Math.abs(guess - answer);
-        let heat = "cold";
+        let heat = "very cold";
         if(diff <= 2){
             heat = "hot";
+            setTint("hot");
         } else if(diff <= 5){
             heat = "warm";
+            setTint("warm");
+        } else if(diff <= 10){
+            heat = "cold";
+            setTint("cold");
+        } else {
+            setTint("very-cold");
         }
 
         if(guess < answer){
@@ -166,4 +175,8 @@ function getDateSuffix(day){
     } else {
         return "th";
     }
+}
+
+function setTint(className){
+    document.body.className = className;
 }
