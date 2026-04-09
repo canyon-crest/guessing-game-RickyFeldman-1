@@ -51,11 +51,20 @@ function makeGuess(){
         updateScore(guessCount);
         resetGame();
     }
-    else if(guess < answer){
-        msg.textContent = "Too low, try again.";
-    }
-    else{
-        msg.textContent = "Too high, try again.";
+    else {
+        const diff = Math.abs(guess - answer);
+        let heat = "cold";
+        if(diff <= 2){
+            heat = "hot";
+        } else if(diff <= 5){
+            heat = "warm";
+        }
+
+        if(guess < answer){
+            msg.textContent = "Too low, you're " + heat + ".";
+        } else {
+            msg.textContent = "Too high, you're " + heat + ".";
+        }
     }
 
 }
@@ -102,7 +111,6 @@ function giveUp(){
 }
 
 displayDate();
-
 function displayDate(){
     const now = new Date();
     const monthNames = [
